@@ -160,4 +160,20 @@ describe("TokenTrade", async function () {
     assert.equal(ownerAfter, ownerBefore + fee);
     assert.equal(await trade.read.accumulatedFees([tokenA.address]), 0n);
   });
+
+  it("run scripts/homework-flow.ts", async function () {
+    const { exec } = await import("node:child_process");
+    const { promisify } = await import("node:util");
+    const execAsync = promisify(exec);
+
+    const { stdout, stderr } = await execAsync("npx hardhat run scripts/homework-flow.ts");
+
+    console.log("\n[homework-flow stdout]\n" + stdout);
+    if (stderr?.trim()) {
+      console.error("\n[homework-flow stderr]\n" + stderr);
+    }
+
+    assert.match(stdout, /REQUIRED ADDRESSES/);
+    assert.match(stdout, /REQUIRED RECEIPTS/);
+  });
 });
